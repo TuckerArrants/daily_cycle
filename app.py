@@ -13,7 +13,8 @@ st.set_page_config(layout='wide')
 
 @st.cache_data
 def load_data_for_instrument(instrument: str) -> pd.DataFrame:
-    df = pd.read_csv(f'https://raw.githubusercontent.com/TuckerArrants/daily_cycle/main/{instrument}_Full_Day_Partial_Day_From_2008_V1.csv'
+    df = pd.read_csv(f'https://raw.githubusercontent.com/TuckerArrants/daily_cycle/main/{instrument}_Full_Day_Partial_Day_From_2008_V1.csv')
+    return df
 
 # ✅ Store username-password pairs
 USER_CREDENTIALS = {
