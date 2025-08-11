@@ -317,7 +317,7 @@ day_type_cols = [
     "full_day_type",
 ]
 day_type_title = [
-    "Day Type",
+    "Full Day Type",
 ]
 segment_order_with_no = ["Upside", "Downside", "Inside", "Outside", "Undefined"]
 
