@@ -281,8 +281,11 @@ for idx, col in enumerate(partial_day_high_col):
             #.reindex(segment_order_with_no, fill_value=0)
         )
         perc = counts * 100
-        perc = perc[perc > 0]
-
+        #perc = perc[perc > 0]
+        times_sorted = sorted(
+            perc.index,
+            key=lambda t: datetime.strptime(t, "%H:%M")  # adjust format if needed
+        )
         fig = px.bar(
             x=perc.index,
             y=perc.values,
@@ -293,8 +296,10 @@ for idx, col in enumerate(partial_day_high_col):
         fig.update_traces(textposition="outside")
         fig.update_layout(
             xaxis_tickangle=90,
-            yaxis=dict(showticklabels=False),
-            xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
+            xaxis={
+                "categoryorder": "array",
+                "categoryarray": times_sorted
+            },
             margin=dict(l=10, r=10, t=30, b=10),
         )
 
