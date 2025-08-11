@@ -124,72 +124,12 @@ default_filters = {
     "selected_day":                       "All",
     "date_range":                 (min_date, max_date),
 
-    "prdr_mid_hit_filter":                "All",
-    "adr_mid_hit_filter":                 "All",
-    "odr_mid_hit_filter":                 "All",
-
-    "prdr_mid_hit_filter_exclusion":      "None",
-    "adr_mid_hit_filter_exclusion":       "None",
-    "odr_mid_hit_filter_exclusion":       "None",
-
-    "prdr_to_adr_model_filter" : [],
-    "adr_to_rdr_model_filter" : [],
+    
+    "podr_to_rdr_model_filter" : [],
+    "rdr_to_adr_model_filter" : [],
+    "rdr_to_odr_model_filter": [],
     "adr_to_odr_model_filter" : [],
-    "odr_to_rdr_model_filter" : [],
-    
-    "prdr_conf_direction_filter" : "All",
-    "adr_conf_direction_filter" : "All",
-    "odr_conf_direction_filter" : "All",
-    "rdr_conf_direction_filter" : "All",
-    
-    "prdr_conf_valid_filter" : "All",
-    "adr_conf_valid_filter" : "All",
-    "odr_conf_valid_filter" : "All",
-    "rdr_conf_valid_filter" : "All",
-
-    "adr_open_to_1800_open_filter" : "All",
-    "odr_open_to_1800_open_filter" : "All",
-    "rdr_open_to_1800_open_filter" : "All",
-
-    "prev_rdr_box_color_filter" : "All",
-    "adr_box_color_filter" : "All",
-    "odr_box_color_filter" : "All",
-    "rdr_box_color_filter" : "All",
-    
-    "adr_open_to_prdr_1555_close_filter" : "All",
-    "odr_open_to_prdr_1555_close_filter" : "All",
-    "rdr_open_to_prdr_1555_close_filter" : "All",
-
-    "prdr_box_color_filter" : "All",
-    "adr_box_color_filter" : "All",
-    "odr_box_color_filter" : "All",
-    "rdr_box_color_filter" : "All",
-    
-    "prdr_high_filter":                   "All", 
-    "prdr_adr_transition_high_filter":    "All",
-    "adr_high_filter":                    "All", 
-    "adr_odr_transition_high_filter":     "All",
-    "odr_high_filter":                    "All",
-    "odr_rdr_transition_high_filter":     "All",
-    "prdr_low_filter":                    "All",
-    "prdr_adr_transition_low_filter":     "All", 
-    "adr_low_filter":                     "All", 
-    "adr_odr_transition_low_filter":      "All", 
-    "odr_low_filter":                     "All", 
-    "odr_rdr_transition_low_filter":      "All",
-
-    "prdr_high_filter_exclusion":                   "None", 
-    "prdr_adr_transition_high_filter_exclusion":    "None", 
-    "adr_high_filter_exclusion":                    "None", 
-    "adr_odr_transition_high_filter_exclusion":     "None", 
-    "odr_high_filter_exclusion":                    "None", 
-    "odr_rdr_transition_high_filter_exclusion":     "None", 
-    "prdr_low_filter_exclusion":                    "None", 
-    "prdr_adr_transition_low_filter_exclusion":     "None",  
-    "adr_low_filter_exclusion":                     "None", 
-    "adr_odr_transition_low_filter_exclusion":      "None",  
-    "odr_low_filter_exclusion":                     "None", 
-    "odr_rdr_transition_low_filter_exclusion":      "None", 
+   
 }
 
 # 2) Reset button with callback
@@ -216,32 +156,31 @@ with st.expander("Models", expanded=False):
     row1_cols = st.columns([1, 1, 1, 1])
     with row1_cols[0]:
         prev_rdr_to_adr_model_filter = st.multiselect(
-            "PRDR-ADR Model",
+            "PODR-RDR Model",
             options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="prdr_to_adr_model_filter",
+            key="podr_to_rdr_model_filter",
         )
         
     with row1_cols[1]:
-        adr_to_odr_model_filter = st.multiselect(
-            "ADR-ODR Model",
+        rdr_to_adr_model_filter = st.multiselect(
+            "RDR-ADR Model",
             options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="adr_to_odr_model_filter", 
-        )
+            key="rdr_to_adr_model_filter", 
+        )   
 
     with row1_cols[2]:
-        adr_to_rdr_model_filter = st.multiselect(
-            "PRDR-ODR Model",
+        rdr_to_odr_model_filter = st.multiselect(
+            "RDR-ODR Model",
             options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="adr_to_rdr_model_filter",
+            key="rdr_to_odr_model_filter",
         )
         
     with row1_cols[3]:
-        odr_to_rdr_model_filter = st.multiselect(
-            "ODR-RDR Model",
+        adr_to_odr_model_filter = st.multiselect(
+            "ADR-ODR Model",
             options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="odr_to_rdr_model_filter",
-        )
-        
+            key="adr_to_odr_model_filter",
+        )        
 
 #########################################
 ### Filter Mapping
@@ -249,71 +188,12 @@ with st.expander("Models", expanded=False):
 
 # map each filter to its column
 inclusion_map = {
-    "prev_rdr_high_touch_time_bucket":       "prdr_high_filter",
-    "pre_adr_high_touch_time_bucket":        "prdr_adr_transition_high_filter",
-    "adr_high_touch_time_bucket":            "adr_high_filter",
-    "adr_transition_high_touch_time_bucket": "adr_odr_transition_high_filter",
-    "odr_high_touch_time_bucket":            "odr_high_filter",
-    "odr_transition_high_touch_time_bucket": "odr_rdr_transition_high_filter",
 
-    "prev_rdr_low_touch_time_bucket":        "prdr_low_filter",
-    "pre_adr_low_touch_time_bucket":         "prdr_adr_transition_low_filter",
-    "adr_low_touch_time_bucket":             "adr_low_filter",
-    "adr_transition_low_touch_time_bucket":  "adr_odr_transition_low_filter",
-    "odr_low_touch_time_bucket":             "odr_low_filter",
-    "odr_transition_low_touch_time_bucket":  "odr_rdr_transition_low_filter",
-
-    "prev_rdr_idr_midline_touch_time_bucket":   "prdr_mid_hit_filter",
-    "adr_idr_midline_touch_time_bucket":       "adr_mid_hit_filter",
-    "odr_idr_midline_touch_time_bucket":       "odr_mid_hit_filter",
-
-    "prev_rdr_to_adr_model" : "prdr_to_adr_model_filter",
-    "adr_to_odr_model" : "adr_to_odr_model_filter",
-    "prev_rdr_to_odr_model" : "adr_to_rdr_model_filter",
     "odr_to_rdr_model" : "odr_to_rdr_model_filter",
+    "rdr_to_adr_model" : "rdr_to_adr_model_filter",
+    "rdr_to_odr_model" : "rdr_to_odr_model_filter",
+    "adr_to_odr_model" : "adr_to_odr_model_filter",
 
-    "adr_open_to_1800_open" : "adr_open_to_1800_open_filter",
-    "odr_open_to_1800_open" : "odr_open_to_1800_open_filter",
-    "rdr_open_to_1800_open" : "rdr_open_to_1800_open_filter",
-
-    "adr_open_to_prev_1555_close" : "adr_open_to_prdr_1555_close_filter",
-    "odr_open_to_prev_1555_close" : "odr_open_to_prdr_1555_close_filter",
-    "rdr_open_to_prev_1555_close" : "rdr_open_to_prdr_1555_close_filter",
-
-    "prev_rdr_box_color" : "prdr_box_color_filter",
-    "adr_box_color" : "adr_box_color_filter",
-    "odr_box_color" : "odr_box_color_filter",
-    "rdr_box_color" : "rdr_box_color_filter",
-
-    "prev_rdr_conf_direction" : "prdr_conf_direction_filter",
-    "adr_conf_direction" : "adr_conf_direction_filter",
-    "odr_conf_direction" : "odr_conf_direction_filter",
-    "rdr_conf_direction" : "rdr_conf_direction_filter",
-
-    "prev_rdr_conf_valid" : "prdr_conf_valid_filter",
-    "adr_conf_valid" : "adr_conf_valid_filter",
-    "odr_conf_valid" : "odr_conf_valid_filter",
-    "rdr_conf_valid" : "rdr_conf_valid_filter",
-}
-
-exclusion_map = {
-    "prev_rdr_high_touch_time_bucket":       "prdr_high_filter_exclusion",
-    "pre_adr_high_touch_time_bucket":        "prdr_adr_transition_high_filter_exclusion",
-    "adr_high_touch_time_bucket":            "adr_high_filter_exclusion",
-    "adr_transition_high_touch_time_bucket": "adr_odr_transition_high_filter_exclusion",
-    "odr_high_touch_time_bucket":            "odr_high_filter_exclusion",
-    "odr_transition_high_touch_time_bucket": "odr_rdr_transition_high_filter_exclusion",
-
-    "prev_rdr_low_touch_time_bucket":        "prdr_low_filter_exclusion",
-    "pre_adr_low_touch_time_bucket":         "prdr_adr_transition_low_filter_exclusion",
-    "adr_low_touch_time_bucket":             "adr_low_filter_exclusion",
-    "adr_transition_low_touch_time_bucket":  "adr_odr_transition_low_filter_exclusion",
-    "odr_low_touch_time_bucket":             "odr_low_filter_exclusion",
-    "odr_transition_low_touch_time_bucket":  "odr_rdr_transition_low_filter_exclusion",
-
-    "prev_rdr_idr_midline_touch_time_bucket":       "prdr_mid_hit_filter_exclusion",
-    "adr_idr_midline_touch_time_bucket":            "adr_mid_hit_filter_exclusion",
-    "odr_idr_midline_touch_time_bucket":            "odr_mid_hit_filter_exclusion",
 }
 
 
