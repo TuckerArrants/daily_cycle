@@ -99,7 +99,6 @@ if "date" in df.columns:
 else:
     st.sidebar.warning("No 'date' column found in your data!")
 
-st.write(len(df))
 #########################################
 ### Sidebar
 #########################################
@@ -148,39 +147,37 @@ if isinstance(start_date, tuple):
 st.markdown("### Dropdown Filters")
 
 
-
 #########################################
 ### Model Filters
 #########################################
-with st.expander("Models", expanded=False):
-    row1_cols = st.columns([1, 1, 1, 1])
-    with row1_cols[0]:
-        podr_to_rdr_model_filter = st.multiselect(
-            "PODR-RDR Model",
-            options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="podr_to_rdr_model_filter",
-        )
-        
-    with row1_cols[1]:
-        rdr_to_adr_model_filter = st.multiselect(
-            "RDR-ADR Model",
-            options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="rdr_to_adr_model_filter", 
-        )   
+row1_cols = st.columns([1, 1, 1, 1])
+with row1_cols[0]:
+    podr_to_rdr_model_filter = st.multiselect(
+        "PODR-RDR Model",
+        options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
+        key="podr_to_rdr_model_filter",
+    )
+    
+with row1_cols[1]:
+    rdr_to_adr_model_filter = st.multiselect(
+        "RDR-ADR Model",
+        options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
+        key="rdr_to_adr_model_filter", 
+    )   
 
-    with row1_cols[2]:
-        rdr_to_odr_model_filter = st.multiselect(
-            "RDR-ODR Model",
-            options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="rdr_to_odr_model_filter",
-        )
-        
-    with row1_cols[3]:
-        adr_to_odr_model_filter = st.multiselect(
-            "ADR-ODR Model",
-            options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
-            key="adr_to_odr_model_filter",
-        )        
+with row1_cols[2]:
+    rdr_to_odr_model_filter = st.multiselect(
+        "RDR-ODR Model",
+        options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
+        key="rdr_to_odr_model_filter",
+    )
+    
+with row1_cols[3]:
+    adr_to_odr_model_filter = st.multiselect(
+        "ADR-ODR Model",
+        options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
+        key="adr_to_odr_model_filter",
+    )        
 
 #########################################
 ### Filter Mapping
@@ -195,7 +192,6 @@ inclusion_map = {
     "adr_to_odr_model" : "adr_to_odr_model_filter",
 
 }
-
 
 # Apply filters
 df_filtered = df.copy()
@@ -268,132 +264,6 @@ for idx, col in enumerate(model_cols):
     row1[idx].plotly_chart(fig, use_container_width=True)
 
 
-#########################################################
-### HoD / LoD Session Buckets
-#########################################################
-hod_lod_cols = [
-    "hod",
-    "lod",
-]
-hod_lod_titles = [
-    "High of Day",
-    "Low of Day"
-]
-
-hod_lod_row = st.columns(2)
-for idx, col in enumerate(hod_lod_cols):
-    if col in df_filtered:
-        counts = (
-            df_filtered[col]
-            .value_counts(normalize=True)
-            .reindex(segment_order_with_no, fill_value=0)
-        )
-        perc = counts * 100
-        perc = perc[perc > 0]
-
-        fig = px.bar(
-            x=perc.index,
-            y=perc.values,
-            text=[f"{v:.1f}%" for v in perc.values],
-            labels={"x": "", "y": ""},
-            title=hod_lod_titles[idx],
-        )
-        fig.update_traces(textposition="outside")
-        fig.update_layout(
-            xaxis_tickangle=90,
-            yaxis=dict(showticklabels=False),
-            xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
-            margin=dict(l=10, r=10, t=30, b=10),
-        )
-
-        hod_lod_row[idx].plotly_chart(fig, use_container_width=True)
-
-#########################################################
-### HoD / LoD 5m Buckets
-#########################################################
-times = [f"{h:02d}:{m:02d}" 
-         for h in range(24) 
-         for m in range(0, 60, 5)]
-
-first_half  = [t for t in times if "18:00" <= t <= "23:55"]
-second_half = [t for t in times if "00:00" <= t <= "15:55"]
-rotated = first_half + second_half
-
-hod_hm_cols = [
-    "hod_hm",
-]
-hod_hm_titles = [
-    "High of Day (5m)",
-]
-
-hod_row_hm = st.columns(len(hod_hm_cols))
-for idx, col in enumerate(hod_hm_cols):
-    if col in df_filtered:
-        counts = (
-            df_filtered[col]
-            .value_counts(normalize=True)
-        )
-        perc = counts * 100
-        perc = perc[perc > 0]
-
-        y_vals = [perc.get(t, 0) for t in rotated]
-        txt    = [f"{v:.1f}%"    for v in y_vals]
-
-        fig = px.bar(
-            x=rotated,
-            y=y_vals,
-            text=txt,
-            labels={"x": "", "y": ""},
-            title=hod_hm_titles[idx],
-        )
-        fig.update_traces(textposition="outside")
-        fig.update_xaxes(categoryorder="array",
-                        categoryarray=rotated,
-                        tickangle=90)
-        fig.update_layout(
-            yaxis=dict(showticklabels=False),
-            margin=dict(l=10, r=10, t=30, b=10),
-        )
-
-        hod_row_hm[idx].plotly_chart(fig, use_container_width=True)
-
-lod_hm_cols = [
-    "lod_hm",
-]
-lod_hm_titles = [
-    "Low of Day (5m)",
-]
-
-lod_row_hm = st.columns(len(lod_hm_cols))
-for idx, col in enumerate(lod_hm_cols):
-    if col in df_filtered:
-        counts = (
-            df_filtered[col]
-            .value_counts(normalize=True)
-        )
-        perc = counts * 100
-        perc = perc[perc > 0]
-
-        y_vals = [perc.get(t, 0) for t in rotated]
-        txt    = [f"{v:.1f}%"    for v in y_vals]
-
-        fig = px.bar(
-            x=rotated,
-            y=y_vals,
-            text=txt,
-            labels={"x": "", "y": ""},
-            title=lod_hm_titles[idx],
-        )
-        fig.update_traces(textposition="outside")
-        fig.update_xaxes(categoryorder="array",
-                        categoryarray=rotated,
-                        tickangle=90)
-        fig.update_layout(
-            yaxis=dict(showticklabels=False),
-            margin=dict(l=10, r=10, t=30, b=10),
-        )
-
-        lod_row_hm[idx].plotly_chart(fig, use_container_width=True)
 
 #########################################################
 ### Partial Day Highs/Lows 5m Buckets
@@ -444,7 +314,7 @@ for idx, col in enumerate(partial_day_type_cols):
 ### Day Type
 #####################################
 day_type_cols = [
-    "day_type",
+    "full_day_type",
 ]
 day_type_title = [
     "Day Type",
