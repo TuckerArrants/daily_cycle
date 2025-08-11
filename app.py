@@ -258,8 +258,43 @@ for idx, col in enumerate(model_cols):
         yaxis=dict(showticklabels=False))
 
     #row1[idx].plotly_chart(fig, use_container_width=True)
+#####################################
+### Cycle Pair
+#####################################
+cycle_pair_col = [
+    "cycle_pair",
+]
+cycle_pair_title = [
+    "Cycle Pair",
+]
 
+cycle_pair_row = st.columns(1)
+for idx, col in enumerate(cycle_pair_col):
+    if col in df_filtered:
+        counts = (
+            df_filtered[col]
+            .value_counts(normalize=True)
+            #.reindex(segment_order_with_no, fill_value=0)
+        )
+        perc = counts * 100
+        perc = perc[perc > 0]
 
+        fig = px.bar(
+            x=perc.index,
+            y=perc.values,
+            text=[f"{v:.1f}%" for v in perc.values],
+            labels={"x": "", "y": ""},
+            title=cycle_pair_title[idx],
+        )
+        fig.update_traces(textposition="outside")
+        fig.update_layout(
+            xaxis_tickangle=90,
+            yaxis=dict(showticklabels=False),
+            xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
+            margin=dict(l=10, r=10, t=30, b=10),
+        )
+
+        cycle_pair_row[idx].plotly_chart(fig, use_container_width=True)
 
 #########################################################
 ### Partial Day Highs/Lows 5m Buckets 
@@ -413,44 +448,6 @@ for idx, col in enumerate(day_type_cols):
         )
 
         day_type_row[idx].plotly_chart(fig, use_container_width=True)
-
-#####################################
-### Cycle Pair
-#####################################
-cycle_pair_col = [
-    "cycle_pair",
-]
-cycle_pair_title = [
-    "Cycle Pair",
-]
-
-cycle_pair_row = st.columns(1)
-for idx, col in enumerate(cycle_pair_col):
-    if col in df_filtered:
-        counts = (
-            df_filtered[col]
-            .value_counts(normalize=True)
-            #.reindex(segment_order_with_no, fill_value=0)
-        )
-        perc = counts * 100
-        perc = perc[perc > 0]
-
-        fig = px.bar(
-            x=perc.index,
-            y=perc.values,
-            text=[f"{v:.1f}%" for v in perc.values],
-            labels={"x": "", "y": ""},
-            title=cycle_pair_title[idx],
-        )
-        fig.update_traces(textposition="outside")
-        fig.update_layout(
-            xaxis_tickangle=90,
-            yaxis=dict(showticklabels=False),
-            xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
-            margin=dict(l=10, r=10, t=30, b=10),
-        )
-
-        cycle_pair_row[idx].plotly_chart(fig, use_container_width=True)
 
 
 st.caption(f"Sample size: {len(df_filtered):,} rows")
