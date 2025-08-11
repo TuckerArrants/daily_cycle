@@ -264,6 +264,7 @@ for idx, col in enumerate(model_cols):
 #########################################################
 ### Partial Day Highs/Lows 5m Buckets 
 #########################################################
+time_order = [f"{h:02d}:{m:02d}" for h in range(4, 10) for m in range(0, 60, 5) if not (h == 9 and m > 25)]
 
 partial_day_high_col = [
     "partial_day_high_hm",
@@ -282,10 +283,7 @@ for idx, col in enumerate(partial_day_high_col):
         )
         perc = counts * 100
         #perc = perc[perc > 0]
-        times_sorted = sorted(
-            perc.index,
-            key=lambda t: datetime.strptime(t, "%H:%M")  # adjust format if needed
-        )
+
         fig = px.bar(
             x=perc.index,
             y=perc.values,
@@ -298,7 +296,7 @@ for idx, col in enumerate(partial_day_high_col):
             xaxis_tickangle=90,
             xaxis={
                 "categoryorder": "array",
-                "categoryarray": times_sorted
+                "categoryarray": time_order
             },
             margin=dict(l=10, r=10, t=30, b=10),
         )
