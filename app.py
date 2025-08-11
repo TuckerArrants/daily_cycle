@@ -279,7 +279,7 @@ for idx, col in enumerate(partial_day_high_col):
         counts = (
             df_filtered[col]
             .value_counts(normalize=True)
-            #.reindex(segment_order_with_no, fill_value=0)
+            .reindex(time_order, fill_value=0)
         )
         perc = counts * 100
         #perc = perc[perc > 0]
@@ -294,9 +294,7 @@ for idx, col in enumerate(partial_day_high_col):
         fig.update_traces(textposition="outside")
         fig.update_layout(
             xaxis_tickangle=90,
-            xaxis={
-                "categoryorder": "array",
-                "categoryarray": time_order
+            xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
             },
             margin=dict(l=10, r=10, t=30, b=10),
         )
