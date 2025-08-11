@@ -264,12 +264,14 @@ for idx, col in enumerate(model_cols):
 #########################################################
 ### Partial Day Highs/Lows 5m Buckets 
 #########################################################
-time_order = [f"{h:02d}:{m:02d}:00" for h in range(4, 10) for m in range(0, 60, 5) if not (h == 9 and m > 25)]
+time_order = [f"{h:02d}:{m:02d}:00"
+              for h in range(4, 16)      # 04 … 15
+              for m in range(0, 60, 5)]  # :00 … :55
 
 partial_day_high_col = [
-    "partial_day_high_hm",
+    "4_1555_high_hm",
 ]
-partial_day_type_title = [
+partial_day_high_title = [
     "Partial Day High",
 ]
 
@@ -289,7 +291,7 @@ for idx, col in enumerate(partial_day_high_col):
             y=perc.values,
             text=[f"{v:.1f}%" for v in perc.values],
             labels={"x": "", "y": ""},
-            title=partial_day_type_title[idx],
+            title=partial_day_high_title[idx],
         )
         fig.update_traces(textposition="outside")
         fig.update_layout(
@@ -299,6 +301,40 @@ for idx, col in enumerate(partial_day_high_col):
         )
 
         partial_day_high_row[idx].plotly_chart(fig, use_container_width=True)
+
+partial_day_low_col = [
+    "4_1555_low_hm",
+]
+partial_day_low_title = [
+    "Partial Day Low",
+]
+
+partial_day_low_row = st.columns(1)
+for idx, col in enumerate(partial_day_low_col):
+    if col in df_filtered:
+        counts = (
+            df_filtered[col]
+            .value_counts(normalize=True)
+            .reindex(time_order, fill_value=0)
+        )
+        perc = counts * 100
+        #perc = perc[perc > 0]
+
+        fig = px.bar(
+            x=perc.index,
+            y=perc.values,
+            text=[f"{v:.1f}%" for v in perc.values],
+            labels={"x": "", "y": ""},
+            title=partial_day_low_title[idx],
+        )
+        fig.update_traces(textposition="outside")
+        fig.update_layout(
+            xaxis_tickangle=90,
+            xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
+            margin=dict(l=10, r=10, t=30, b=10),
+        )
+
+        partial_day_low_row[idx].plotly_chart(fig, use_container_width=True)
         
 #####################################
 ### Partial Day Type
