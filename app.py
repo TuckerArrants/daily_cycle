@@ -155,7 +155,7 @@ st.markdown("### Dropdown Filters")
 with st.expander("Models", expanded=False):
     row1_cols = st.columns([1, 1, 1, 1])
     with row1_cols[0]:
-        prev_rdr_to_adr_model_filter = st.multiselect(
+        podf_to_rdr_model_filter = st.multiselect(
             "PODR-RDR Model",
             options=["UXP", "UX", "U", "DXP", "DX", "D", "RC", "RX"],
             key="podr_to_rdr_model_filter",
@@ -189,7 +189,7 @@ with st.expander("Models", expanded=False):
 # map each filter to its column
 inclusion_map = {
 
-    "odr_to_rdr_model" : "odr_to_rdr_model_filter",
+    "podr_to_rdr_model" : "odr_to_rdr_model_filter",
     "rdr_to_adr_model" : "rdr_to_adr_model_filter",
     "rdr_to_odr_model" : "rdr_to_odr_model_filter",
     "adr_to_odr_model" : "adr_to_odr_model_filter",
@@ -225,16 +225,16 @@ for col, state_key in inclusion_map.items():
 ### Models Graphs
 #########################################################
 model_cols = [
-    "prev_rdr_to_adr_model",
-    "adr_to_odr_model",
-    "prev_rdr_to_odr_model",
-    "odr_to_rdr_model"]
+    "podr_to_rdr_model",
+    "rdr_to_adr_model",
+    "rdr_to_odr_model",
+    "adr_to_odr_model"]
 
 model_titles = [
-    "PRDR-ADR Model",
-    "ADR-ODR Model",
-    "PRDR-ODR Model",
-    "ODR-RDR Model"]
+    "PODR-RDR Model",
+    "RDR-ADR Model",
+    "RDR-ODR Model",
+    "ADR-ODR Model"]
 
 row1 = st.columns(len(model_cols))
 for idx, col in enumerate(model_cols):
