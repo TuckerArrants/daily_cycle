@@ -294,7 +294,7 @@ for idx, col in enumerate(cycle_pair_col):
             xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
             margin=dict(l=10, r=10, t=80, b=10),
         )
-        fig.update_yaxes(range=[0, max_y * 1.15])                   # ~15% headroom
+        fig.update_yaxes(range=[0, max_y * 1.1])                   # ~15% headroom
 
         cycle_pair_row[idx].plotly_chart(fig, use_container_width=True)
 
