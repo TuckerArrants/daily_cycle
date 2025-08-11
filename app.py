@@ -55,7 +55,7 @@ if not st.session_state["authenticated"]:
     st.stop()
 
 # ✅ If authenticated, show the full app
-st.title("Trompete Kostet Knete")
+st.title("Daily Cycles")
 
 # ↓ in your sidebar:
 instrument_options = ["ES", "NQ", "YM", "RTY", "CL", "GC"]
@@ -220,20 +220,7 @@ for col, state_key in inclusion_map.items():
         if sel != "All":
             df_filtered = df_filtered[df_filtered[col] == sel]
 
-#for col, state_key in exclusion_map.items():
-    #excludes = st.session_state[state_key]
-    #if excludes:
-        #df_filtered = df_filtered[~df_filtered[col].isin(excludes)]
-
-for col, state_key in exclusion_map.items():
-    sel = st.session_state[state_key]   # now either "None" or a segment string
-    if sel != "None":
-        # build the full cascade from start up through 'sel'
-        idx = segment_order.index(sel)
-        to_exclude = set(segment_order[: idx+1])
-        df_filtered = df_filtered[~df_filtered[col].isin(to_exclude)]
   
-
 #########################################################
 ### Models Graphs
 #########################################################
