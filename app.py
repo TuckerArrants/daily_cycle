@@ -295,7 +295,6 @@ for idx, col in enumerate(partial_day_high_col):
         fig.update_layout(
             xaxis_tickangle=90,
             xaxis={"categoryorder": "array", "categoryarray": list(perc.index)},
-            },
             margin=dict(l=10, r=10, t=30, b=10),
         )
 
