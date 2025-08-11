@@ -115,7 +115,6 @@ start_date, end_date = st.sidebar.date_input(
     key="date_range"
 )
 
-
 #########################################
 ### Resets
 #########################################
@@ -143,9 +142,6 @@ st.sidebar.button("Reset all filters", on_click=reset_all_filters)
 if isinstance(start_date, tuple):
     # sometimes date_input returns a single date if you pass a single default
     start_date, end_date = start_date
-
-st.markdown("### Dropdown Filters")
-
 
 #########################################
 ### Model Filters
