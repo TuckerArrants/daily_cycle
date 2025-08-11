@@ -264,7 +264,7 @@ for idx, col in enumerate(model_cols):
 #########################################################
 ### Partial Day Highs/Lows 5m Buckets 
 #########################################################
-time_order = [f"{h:02d}:{m:02d}" for h in range(4, 10) for m in range(0, 60, 5) if not (h == 9 and m > 25)]
+time_order = [f"{h:02d}:{m:02d}:00" for h in range(4, 10) for m in range(0, 60, 5) if not (h == 9 and m > 25)]
 
 partial_day_high_col = [
     "partial_day_high_hm",
